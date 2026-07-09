@@ -1,8 +1,10 @@
+import CustomMenu from "@/components/custom/CustomMenu"
 import { Outlet } from "react-router"
 const HeroesLayout = () => {
   return (
     <div className="min-h-screen">
       <div className="mx-auto max-w-7xl p-6">
+        <CustomMenu />
         <Outlet />
       </div>
     </div>
