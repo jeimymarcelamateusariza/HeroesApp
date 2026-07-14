@@ -19,3 +19,10 @@ To use the components in your app, import them as follows:
 ```tsx
 import { Button } from "@/components/ui/button"
 ```
+
+## Levantar desarrollo
+
+1. Clonar el repositorio
+2. Editar el archivo .env con las variables de entorno
+3. Ejecutar npm i
+4. Ejecutar npm run dev

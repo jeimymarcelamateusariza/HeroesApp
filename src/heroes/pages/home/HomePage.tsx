@@ -1,15 +1,26 @@
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import CustomJumbotron from "@/components/custom/CustomJumbotron"
 import HeroStats from "@/heroes/components/HeroStats"
 import HeroGrid from "@/heroes/components/HeroGrid"
-import { useState } from "react"
 import CustomPagination from "@/components/custom/CustomPagination"
 import CustomBreadcrumb from "@/components/custom/CustomBreadcrumb"
+import { getHeroesByPageAction } from "@/heroes/actions/get-heroes-by-page.action"
 
 export default function SuperheroApp() {
   const [activeTab, setActiveTab] = useState<
     "all" | "favorites" | "heroes" | "villains"
   >("all")
+
+  const { data: heroesResponse } = useQuery({
+    queryKey: ["heroes"],
+    queryFn: () => getHeroesByPageAction(),
+    staleTime: 1000 * 60 * 5, // 5 minutos
+  })
+
+  console.log("data de heroes", heroesResponse)
 
   return (
     <>
@@ -51,7 +62,7 @@ export default function SuperheroApp() {
           <TabsContent value="all">
             <h2>Todos los personajes</h2>
             {/** Mostrar todos los personajes */}
-            <HeroGrid />
+            <HeroGrid heroes={heroesResponse?.heroes ?? []} />
           </TabsContent>
           <TabsContent value="favorites">
             <h2>Favoritos</h2>
