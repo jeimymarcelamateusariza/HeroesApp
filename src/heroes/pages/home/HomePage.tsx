@@ -7,8 +7,9 @@ import HeroStats from "@/heroes/components/HeroStats"
 import HeroGrid from "@/heroes/components/HeroGrid"
 import CustomPagination from "@/components/custom/CustomPagination"
 import CustomBreadcrumb from "@/components/custom/CustomBreadcrumb"
-import { getHeroesByPageAction } from "@/heroes/actions/get-heroes-by-page.action"
 import { useMemo } from "react"
+import useHeroSummary from "@/heroes/hooks/useHeroSummary"
+import usePaginetedHero from "@/heroes/hooks/usePaginetedHero"
 
 export default function SuperheroApp() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -23,11 +24,14 @@ export default function SuperheroApp() {
     return validTabs.includes(activeTab) ? activeTab : "all"
   }, [activeTab])
 
-  const { data: heroesResponse } = useQuery({
-    queryKey: ["heroes", { page, limit }], //Cuando la función que está dentro de tanStack query, recibe argumentos, esos argumentos deben ser parte del querykey
-    queryFn: () => getHeroesByPageAction(+page, +limit),
-    staleTime: 1000 * 60 * 5, // 5 minutos
-  })
+  const { data: heroesResponse } = usePaginetedHero(+page, +limit)
+  // const { data: heroesResponse } = useQuery({
+  //   queryKey: ["heroes", { page, limit }], //Cuando la función que está dentro de tanStack query, recibe argumentos, esos argumentos deben ser parte del querykey
+  //   queryFn: () => getHeroesByPageAction(+page, +limit),
+  //   staleTime: 1000 * 60 * 5, // 5 minutos
+  // })
+
+  const { data: summary } = useHeroSummary()
 
   return (
     <>
@@ -55,7 +59,7 @@ export default function SuperheroApp() {
                 })
               }
             >
-              Todos los personajes (16)
+              Todos los personajes {summary?.totalHeroes}
             </TabsTrigger>
             <TabsTrigger
               value="favorites"
@@ -78,7 +82,7 @@ export default function SuperheroApp() {
                 })
               }
             >
-              Héroes (12)
+              Héroes {summary?.heroCount}
             </TabsTrigger>
             <TabsTrigger
               value="villains"
@@ -89,7 +93,7 @@ export default function SuperheroApp() {
                 })
               }
             >
-              Villanos (2)
+              Villanos {summary?.villainCount}
             </TabsTrigger>
           </TabsList>
           <TabsContent value="all">
