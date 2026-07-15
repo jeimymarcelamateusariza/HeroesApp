@@ -18,13 +18,14 @@ export default function SuperheroApp() {
   const activeTab = searchParams.get("tab") ?? "all"
   const page = searchParams.get("page") ?? "1"
   const limit = searchParams.get("limit") ?? "6"
+  const category = searchParams.get("category") ?? "all"
 
   const selectedTab = useMemo(() => {
     const validTabs = ["all", "favorites", "heroes", "villains"]
     return validTabs.includes(activeTab) ? activeTab : "all"
   }, [activeTab])
 
-  const { data: heroesResponse } = usePaginetedHero(+page, +limit)
+  const { data: heroesResponse } = usePaginetedHero(+page, +limit, category)
   // const { data: heroesResponse } = useQuery({
   //   queryKey: ["heroes", { page, limit }], //Cuando la función que está dentro de tanStack query, recibe argumentos, esos argumentos deben ser parte del querykey
   //   queryFn: () => getHeroesByPageAction(+page, +limit),
@@ -55,6 +56,8 @@ export default function SuperheroApp() {
               onClick={() =>
                 setSearchParams((prev) => {
                   prev.set("tab", "all")
+                  prev.set("category", "all")
+                  prev.set("page", "1")
                   return prev
                 })
               }
@@ -78,6 +81,8 @@ export default function SuperheroApp() {
               onClick={() =>
                 setSearchParams((prev) => {
                   prev.set("tab", "heroes")
+                  prev.set("category", "hero")
+                  prev.set("page", "1")
                   return prev
                 })
               }
@@ -89,6 +94,8 @@ export default function SuperheroApp() {
               onClick={() =>
                 setSearchParams((prev) => {
                   prev.set("tab", "villains")
+                  prev.set("category", "villain")
+                  prev.set("page", "1")
                   return prev
                 })
               }
@@ -108,10 +115,12 @@ export default function SuperheroApp() {
           <TabsContent value="heroes">
             <h2>Héroes</h2>
             {/** Mostrar todos los héroes */}
+            <HeroGrid heroes={heroesResponse?.heroes ?? []} />
           </TabsContent>
           <TabsContent value="villains">
             <h2>Villanos</h2>
             {/** Mostrar todos los villanos */}
+            <HeroGrid heroes={heroesResponse?.heroes ?? []} />
           </TabsContent>
         </Tabs>
 
