@@ -1,7 +1,7 @@
 import { lazy } from "react"
 import { createBrowserRouter, Navigate } from "react-router"
 import AdminPage from "@/admin/pages/AdminPage"
-import HeroPage from "@/heroes/pages/home/HomePage"
+import HeroPage from "@/heroes/pages/hero/HeroPage"
 import HomePage from "@/heroes/pages/home/HomePage"
 //import SearchPage from "@/heroes/pages/search/SearchPage"
 import HeroesLayout from "@/heroes/layout/HeroesLayout"
